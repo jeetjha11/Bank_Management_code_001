@@ -1,6 +1,7 @@
 package App;
 
 import connectionConfig.EstablishConnection;
+import features.Authentication;
 import migration.DataBaseMigration;
 
 
@@ -26,14 +27,16 @@ public class BankApp {
 
         // apply migration for first time
 
-        try {
-            DataBaseMigration.applyMigration(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            DataBaseMigration.applyMigration(connection);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
 
 
         // Authenticating User;
+
+        Authentication.isAuthenticated(connection);
 
 
     }

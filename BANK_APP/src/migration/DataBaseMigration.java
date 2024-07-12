@@ -8,8 +8,8 @@ public class DataBaseMigration {
 
     public static void applyMigration(Connection connection) throws SQLException {
         try {
-//            boolean isLoginApplied=login(connection);
-//            System.out.println(isLoginApplied);
+            boolean isLoginApplied=login(connection);
+            System.out.println(isLoginApplied);
 //            boolean isUserDetailsApplied=userDetailsTable(connection);
 //            System.out.println(isUserDetailsApplied);
         } catch (Exception e) {
@@ -21,7 +21,7 @@ public class DataBaseMigration {
 
     public static boolean login(Connection connection) throws SQLException {
 
-        final String query = "CREATE TABLE userLogin (user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, email VARCHAR(50) NOT NULL UNIQUE,password varchar(50))";
+        final String query = "CREATE TABLE userLogin (user_id VARCHAR(36) NOT NULL PRIMARY KEY, email VARCHAR(50) NOT NULL UNIQUE,password varchar(50))";
 
         try {
             Statement statement = connection.createStatement();
