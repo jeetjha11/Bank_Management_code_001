@@ -37,6 +37,8 @@ public class BankApp {
         // Authenticating User;
 
         Authentication.isAuthenticated(connection);
+        Authentication authentication=new Authentication();
+        System.out.println(authentication.getUserId());
 
 
     }

@@ -14,6 +14,17 @@ public class Authentication {
 
 
     private String  USER_EMAIL="";
+    private static String userId;
+
+    public static int log_count_check=5;
+
+    public String  getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getUserEmail()
     {
@@ -68,6 +79,7 @@ public class Authentication {
 
 
     public static void login(Connection connection) throws SQLException {
+
         try {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter the email id:");
@@ -85,8 +97,20 @@ public class Authentication {
 
                 Authentication authentication=new Authentication();
                 authentication.setUSER_EMAIL(resultSet.getString(2));
+                authentication.setUserId(resultSet.getString(1));
+                System.out.println("Welcome to the portal>>>");
             }
-            System.out.println("Welcome to the portal>>>");
+            else {
+                System.out.println("Invalid Credential Given Please Try again!!! "+log_count_check +" times Left");
+                log_count_check--;
+                if(log_count_check==0)
+                {
+                    System.out.println("You have tried Most Time Please Try again after some time!!!");
+                    return;
+                }
+                login(connection);
+            }
+
             scanner.close();
         }
         catch (Exception e)
@@ -105,7 +129,7 @@ public class Authentication {
             boolean isActive=true;
             String  id=validateUuid(connection);
 
-            PreparedStatement preparedStatement=connection.prepareStatement("insert into usersdetails (user_id,username,email,phone,is_active,password,address) values(?,?,?,?,?,?,?)");
+            PreparedStatement preparedStatement=connection.prepareStatement("insert into usersdetails(user_id,username,email,phone,is_active,password,address) values(?,?,?,?,?,?,?)");
             preparedStatement.setString(1,id);
             System.out.println("Enter the user name: ");
             preparedStatement.setString(2,scanner.next());
@@ -141,19 +165,23 @@ public class Authentication {
             String pass= scanner.next();
             preparedStatement.setString(6, pass);
             System.out.println("Enter the address");
-            preparedStatement.setString(7, scanner.nextLine());
+            preparedStatement.setString(7, scanner.next());
             System.out.println();
 
             int insertResult=preparedStatement.executeUpdate();
+            System.out.println("resultset"+ insertResult);
             if (insertResult>0)
             {
-                PreparedStatement preparedStatement1=connection.prepareStatement("insert into userlogin(userId email,password) values(?,?,?)");
+                PreparedStatement preparedStatement1=connection.prepareStatement("insert into userlogin(user_id,email,password) values(?,?,?)");
                 preparedStatement1.setString(1,id);
                 preparedStatement1.setString(2,tempEmail);
                 preparedStatement1.setString(3,pass);
                 int loginResult=preparedStatement1.executeUpdate();
                 if(loginResult>0)
                 {
+                    Authentication authentication=new Authentication();
+                    authentication.setUSER_EMAIL(tempEmail);
+                    authentication.setUserId(id);
                     System.out.println("Thankyou For registration!!!");
                 }
 
@@ -172,7 +200,7 @@ public class Authentication {
 
     public  static String  validateUuid(Connection connection) throws SQLException {
         String uuid="";
-        System.out.println("valllll");
+        boolean isUnique=false;
         while (true)
         {
             uuid = UUID.randomUUID().toString();
@@ -187,9 +215,11 @@ public class Authentication {
 
                 if(!Objects.equals(uid, uuid))
                 {
-                    return uuid;
+                    isUnique=true;
+                    break;
                 }
             }
+            return uuid;
         }
 
     }
