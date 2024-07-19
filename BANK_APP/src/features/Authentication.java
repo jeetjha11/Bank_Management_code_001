@@ -82,7 +82,7 @@ public class Authentication {
 
         try {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Enter the email id:");
+            System.out.println("Enter the email id: ");
             final String email = scanner.nextLine();
             System.out.println("Enter Password: ");
             final String password = scanner.nextLine();
@@ -99,6 +99,7 @@ public class Authentication {
                 authentication.setUSER_EMAIL(resultSet.getString(2));
                 authentication.setUserId(resultSet.getString(1));
                 System.out.println("Welcome to the portal>>>");
+                scanner.close();
             }
             else {
                 System.out.println("Invalid Credential Given Please Try again!!! "+log_count_check +" times Left");
@@ -132,13 +133,14 @@ public class Authentication {
             PreparedStatement preparedStatement=connection.prepareStatement("insert into usersdetails(user_id,username,email,phone,is_active,password,address) values(?,?,?,?,?,?,?)");
             preparedStatement.setString(1,id);
             System.out.println("Enter the user name: ");
-            preparedStatement.setString(2,scanner.next());
+            String userName=scanner.nextLine();
+            preparedStatement.setString(2,userName);
             Statement statement=connection.createStatement();
             String tempEmail;
             while (true)
             {
-                System.out.println("Enter the email");
-                tempEmail=scanner.next();
+                System.out.println("Enter the email: ");
+                tempEmail=scanner.nextLine();
 //                ResultSet resultSet=statement.executeQuery("select * from user where email="+tempEmail);
                 PreparedStatement preparedStatement1 = connection.prepareStatement("select * from userlogin where email= ? ");
                 preparedStatement1.setString(1, tempEmail);
@@ -157,19 +159,22 @@ public class Authentication {
                     break;
                 }
             }
-            preparedStatement.setString(3,tempEmail);
-            System.out.println("Enter the phone ");
-            preparedStatement.setString(4,scanner.next());
-            preparedStatement.setBoolean(5,isActive);
-            System.out.println("Enter the password");
-            String pass= scanner.next();
-            preparedStatement.setString(6, pass);
-            System.out.println("Enter the address");
-            preparedStatement.setString(7, scanner.next());
-            System.out.println();
 
+            preparedStatement.setString(3,tempEmail);
+            System.out.println("Enter the phone: ");
+            String tempPhone=scanner.next();
+            preparedStatement.setString(4,tempPhone);
+            preparedStatement.setBoolean(5,isActive);
+            System.out.println("Enter the password: ");
+            String pass=scanner.next();
+
+
+            preparedStatement.setString(6, pass);
+            System.out.println("Enter the address: ");
+            String tempAddress=scanner.nextLine();
+
+            preparedStatement.setString(7, tempAddress);
             int insertResult=preparedStatement.executeUpdate();
-            System.out.println("resultset"+ insertResult);
             if (insertResult>0)
             {
                 PreparedStatement preparedStatement1=connection.prepareStatement("insert into userlogin(user_id,email,password) values(?,?,?)");
@@ -183,6 +188,7 @@ public class Authentication {
                     authentication.setUSER_EMAIL(tempEmail);
                     authentication.setUserId(id);
                     System.out.println("Thankyou For registration!!!");
+                    scanner.close();
                 }
 
             }
