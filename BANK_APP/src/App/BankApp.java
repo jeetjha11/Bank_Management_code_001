@@ -2,6 +2,7 @@ package App;
 
 import connectionConfig.EstablishConnection;
 import features.Authentication;
+import features.UserOperation;
 import migration.DataBaseMigration;
 
 
@@ -13,7 +14,10 @@ public class BankApp {
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
+
+        Authentication authentication=new Authentication();
+        String userId=authentication.getUserId();
         System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Welcome>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         System.out.println("\n \n");
 
@@ -39,11 +43,12 @@ public class BankApp {
         Authentication.isAuthenticated(connection);
 
 
-        Authentication authentication=new Authentication();
+
+        Scanner scanner=new Scanner(System.in);
 
         int mainManu, accountManu=-1;
         do {
-            Scanner scanner=new Scanner(System.in);
+
 
             System.out.println(
                     "1. Update Profile"+ "\n" +
@@ -58,11 +63,20 @@ public class BankApp {
             {
                 case 1:{
                     System.out.println("Update Profile");
+                    boolean isUpdated=UserOperation.updateProfile(connection,userId);
+                    if(isUpdated)
+                    {
+                        // display the data
+                    }
+
                     break;
                 }
                 case 2:
                 {
                     System.out.println("delete profile");
+
+                    boolean isDeleted=UserOperation.deleteProfile(connection,userId);
+
                     break;
                 }
                 case 3:

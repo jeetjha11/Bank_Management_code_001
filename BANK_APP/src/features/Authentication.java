@@ -99,7 +99,6 @@ public class Authentication {
                 authentication.setUSER_EMAIL(resultSet.getString(2));
                 authentication.setUserId(resultSet.getString(1));
                 System.out.println("Welcome to the portal>>>");
-                scanner.close();
             }
             else {
                 System.out.println("Invalid Credential Given Please Try again!!! "+log_count_check +" times Left");
@@ -112,7 +111,7 @@ public class Authentication {
                 login(connection);
             }
 
-            scanner.close();
+
         }
         catch (Exception e)
         {
@@ -188,7 +187,6 @@ public class Authentication {
                     authentication.setUSER_EMAIL(tempEmail);
                     authentication.setUserId(id);
                     System.out.println("Thankyou For registration!!!");
-                    scanner.close();
                 }
 
             }
