@@ -13,11 +13,23 @@ public class AccountDetails {
     private String accountNumber;
     private UUID userId;
 
-    public AccountDetails(UUID accountId, String accountType, String accountNumber, UUID userId) {
+    private double balance;
+
+
+    public AccountDetails(UUID accountId, String accountType, String accountNumber, UUID userId,double balance) {
         this.accountId = accountId;
         this.accountType = accountType;
         this.accountNumber = accountNumber;
         this.userId = userId;
+        this.balance=balance;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public static String getIfscCode() {

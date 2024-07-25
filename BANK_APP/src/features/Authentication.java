@@ -14,7 +14,7 @@ public class Authentication {
 
 
     private String  USER_EMAIL="";
-    private static String userId;
+    public static String userId;
 
     public static int log_count_check=5;
 
@@ -36,7 +36,7 @@ public class Authentication {
     }
 
 
-    public static void isAuthenticated(Connection connection)
+    public static String isAuthenticated(Connection connection)
     {
         Scanner scanner=new Scanner(System.in);
         System.out.println(".............................Please Choose.............................");
@@ -49,8 +49,8 @@ public class Authentication {
             case 1:
             {
                try {
-                   registerNewUser(connection);
-                   break;
+                   return registerNewUser(connection);
+
 
                } catch (SQLException e) {
                    throw new RuntimeException(e);
@@ -60,8 +60,8 @@ public class Authentication {
             case 2:
             {
                 try {
-                    login(connection);
-                    break;
+                    return login(connection);
+
 
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
@@ -71,14 +71,16 @@ public class Authentication {
             default:
             {
                 System.out.println("Invalid Choice.. Please Choose Again");
+                return "";
             }
         }
+
     }
 
 
 
 
-    public static void login(Connection connection) throws SQLException {
+    public static String login(Connection connection) throws SQLException {
 
         try {
             Scanner scanner = new Scanner(System.in);
@@ -98,7 +100,12 @@ public class Authentication {
                 Authentication authentication=new Authentication();
                 authentication.setUSER_EMAIL(resultSet.getString(2));
                 authentication.setUserId(resultSet.getString(1));
+                userId=resultSet.getString(1);
+
+
                 System.out.println("Welcome to the portal>>>");
+                return userId;
+
             }
             else {
                 System.out.println("Invalid Credential Given Please Try again!!! "+log_count_check +" times Left");
@@ -106,22 +113,24 @@ public class Authentication {
                 if(log_count_check==0)
                 {
                     System.out.println("You have tried Most Time Please Try again after some time!!!");
-                    return;
                 }
                 login(connection);
             }
+            return "";
 
 
         }
         catch (Exception e)
         {
             e.printStackTrace();
+            return "";
         }
+
     }
 
 
 
-    public static void registerNewUser(Connection connection) throws SQLException {
+    public static String registerNewUser(Connection connection) throws SQLException {
 
         try {
             Scanner scanner=new Scanner(System.in);
@@ -187,6 +196,7 @@ public class Authentication {
                     authentication.setUSER_EMAIL(tempEmail);
                     authentication.setUserId(id);
                     System.out.println("Thankyou For registration!!!");
+                    return id;
                 }
 
             }
@@ -194,11 +204,9 @@ public class Authentication {
         catch (Exception e)
         {
             System.out.println(e.getMessage());
+
         }
-
-
-
-
+        return "";
 
     }
 
@@ -215,6 +223,30 @@ public class Authentication {
             {
                 System.out.println(uuid);
                 System.out.println("ins");
+                String uid=resultSet.getString(1);
+
+                if(!Objects.equals(uid, uuid))
+                {
+                    isUnique=true;
+                    break;
+                }
+            }
+            return uuid;
+        }
+
+    }
+
+    public  static String  validateUuidForAccount(Connection connection) throws SQLException {
+        String uuid="";
+        boolean isUnique=false;
+        while (true)
+        {
+            uuid = UUID.randomUUID().toString();
+            PreparedStatement preparedStatement = connection.prepareStatement("select account_id from accountdetails where account_id= ? ");
+            preparedStatement.setString(1, uuid);
+            ResultSet resultSet=preparedStatement.executeQuery();
+            while (resultSet.next())
+            {
                 String uid=resultSet.getString(1);
 
                 if(!Objects.equals(uid, uuid))

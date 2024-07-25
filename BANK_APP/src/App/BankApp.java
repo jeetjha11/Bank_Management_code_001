@@ -1,11 +1,15 @@
 package App;
 
 import connectionConfig.EstablishConnection;
+import features.AccountOperation;
+import features.AccountOperationsImpl;
 import features.Authentication;
 import features.UserOperation;
 import migration.DataBaseMigration;
 
 
+import java.io.IOException;
+import java.lang.reflect.AnnotatedArrayType;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -14,10 +18,9 @@ public class BankApp {
 
 
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IOException {
 
         Authentication authentication=new Authentication();
-        String userId=authentication.getUserId();
         System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Welcome>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         System.out.println("\n \n");
 
@@ -40,9 +43,7 @@ public class BankApp {
 
         // Authenticating User;
 
-        Authentication.isAuthenticated(connection);
-
-
+        String userId=Authentication.isAuthenticated(connection);
 
         Scanner scanner=new Scanner(System.in);
 
@@ -63,17 +64,19 @@ public class BankApp {
             {
                 case 1:{
                     System.out.println("Update Profile");
+                    System.out.println("delete profile "+ userId );
                     boolean isUpdated=UserOperation.updateProfile(connection,userId);
                     if(isUpdated)
                     {
                         // display the data
+                        break;
                     }
 
                     break;
                 }
                 case 2:
                 {
-                    System.out.println("delete profile");
+                    System.out.println("delete profile "+ userId );
 
                     boolean isDeleted=UserOperation.deleteProfile(connection,userId);
 
@@ -81,7 +84,11 @@ public class BankApp {
                 }
                 case 3:
                 {
-                    System.out.println("Explore bank Account");
+                    AccountOperationsImpl.accountOperation(userId,connection);
+
+
+
+
                     break;
                 }
                 case 4:

@@ -8,6 +8,11 @@ public class ConfigSource {
     final String DB_URL = "jdbc:mysql://localhost:3306/" + DB_NAME;
     final String USER = "root";
 
+//    public String getBankName()
+//    {
+//        return ""
+//    }
+
     public ConfigSource() {
 
     }

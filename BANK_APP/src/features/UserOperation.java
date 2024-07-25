@@ -11,6 +11,7 @@ public class UserOperation {
    static Scanner scanner=new Scanner(System.in);
 
     public static boolean updateProfile(Connection connection,String id) throws SQLException {
+        System.out.println("id"+ id);
         System.out.println("""
                 Please Choose What you want to update: 1. Name
                 2. Email
@@ -25,19 +26,28 @@ public class UserOperation {
             case 1:
             {
 
-                PreparedStatement preparedStatement=connection.prepareStatement("update usersdetails set username= ? where user_id= ?");
-                System.out.println("Enter the new name: ");
-                preparedStatement.setString(1,scanner.next());
-                preparedStatement.setString(2,id);
-                if(preparedStatement.executeUpdate()>0)
-                {
-                    System.out.println("USER NAME HAS BEEN UPDATED");
-                   return true;
-                }
-                else {
-                    System.out.println("Some Error Please try again");
-                    return false;
-                }
+               try
+               {
+                   PreparedStatement preparedStatement=connection.prepareStatement("update usersdetails set username= ? where user_id= ?");
+                   System.out.println("Enter the new name: "+ id);
+                   preparedStatement.setString(1,scanner.next());
+                   preparedStatement.setString(2,id);
+                   int result=preparedStatement.executeUpdate();
+                   System.out.println(result);
+                   if(result>0)
+                   {
+                       System.out.println("USER NAME HAS BEEN UPDATED");
+                       return true;
+                   }
+                   else {
+                       System.out.println("Some Error Please try again");
+                       return false;
+                   }
+               }
+               catch (Exception e)
+               {
+                   e.printStackTrace();
+               }
 
             }
             case 2:
@@ -146,10 +156,18 @@ public class UserOperation {
                 int deleteStatus= preparedStatement.executeUpdate();
                 if(deleteStatus>0)
                 {
+                    int deleteStatus1=0;
 
-                    PreparedStatement preparedStatement1=connection.prepareStatement("delete from userlogin where user_id= ?");
-                    preparedStatement1.setString(1,id);
-                    int deleteStatus1= preparedStatement.executeUpdate();
+                   try
+                   {
+                       PreparedStatement preparedStatement1=connection.prepareStatement("delete from userlogin where user_id= ?");
+                       preparedStatement1.setString(1,id);
+                       deleteStatus1= preparedStatement1.executeUpdate();
+                   }
+                   catch (Exception e)
+                   {
+                       e.printStackTrace();
+                   }
                     if (deleteStatus1>0)
                     {
                         System.out.println("User has been deleted Success");
