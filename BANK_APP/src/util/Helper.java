@@ -65,7 +65,7 @@ public class Helper {
 
         try
         {
-            PreparedStatement preparedStatement=connection.prepareStatement("select accountnumber,ifsccode form accountdetails where accountnumber= ? ");
+            PreparedStatement preparedStatement=connection.prepareStatement("select accountnumber, ifsccode from accountdetails where accountnumber = ? ");
             preparedStatement.setString(1,accountNumber);
             ResultSet resultSet= preparedStatement.executeQuery();
             while (resultSet.next())

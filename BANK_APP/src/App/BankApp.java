@@ -63,8 +63,6 @@ public class BankApp {
             switch (mainManu)
             {
                 case 1:{
-                    System.out.println("Update Profile");
-                    System.out.println("delete profile "+ userId );
                     boolean isUpdated=UserOperation.updateProfile(connection,userId);
                     if(isUpdated)
                     {

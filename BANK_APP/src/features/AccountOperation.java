@@ -15,12 +15,10 @@ public interface AccountOperation {
 
     AccountDetails viewAccountByAccountNumber(String AccountNumber,String user_id);
 
-    double viewAccountBalance(String accountNumber,String user_id);
-
     double creditAmount(String user_id,Connection connection);
 
-    double debitAmount(String accountNumber,String user_id);
+    double debitAmount(String user_id,Connection connection);
 
-    double viewBalance(String accountNumber,String user_id);
+    double viewBalance(String user_id,Connection connection);
 
 }
